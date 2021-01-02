@@ -1,0 +1,543 @@
+#include "car.h"
+
+Car::Car(QObject *parent) : QObject(parent)
+{
+
+
+
+
+
+}
+Car::Car(Car & car)
+{
+
+}
+
+Car::Car(const char * brand,
+	const char * model,
+	const char * color,
+	double max_speed,
+	double power,
+	Money money,
+	double price,
+	formfaktor form,
+const char * coments
+)
+{
+	set_brand(brand);
+	set_model(model);
+	set_color(color);
+	set_maxSpeed(max_speed);
+	set_power(power);
+	set_currency(cur);
+	set_coments(coments);
+	set_formfaktor(form);
+
+
+	if (strcmp(brand, "None") != 0){
+
+
+		ID = get_id();
+
+		deserilization();
+
+	}
+
+	
+}                
+
+                  
+int Car::gets_id() {
+	             
+	return ID;
+
+}
+
+
+bool Car::set_maxSpeed(double speed)
+{
+
+	this->max_speed = speed;
+
+	return false;
+}
+
+bool Car::set_power(double power)
+{
+	this->power = power;
+	return false;
+}
+
+bool Car::set_color(const char * color)
+{
+
+	if (this->color != NULL) delete[]this->color;
+
+	this->color = new char[len_string];
+
+	memcpy_s(this->color, len_string, color, len_string);
+	this->color[strlen(this->color)] = 0;
+	return false;
+}
+
+bool Car::set_brand(const char * brand)
+{
+	if (this->brand != NULL) {
+		delete[]this->brand;
+	}
+	this->brand = new char[len_string];
+	
+	memcpy_s(this->brand,len_string , brand,len_string);
+	this->brand[strlen(brand)] = 0;
+	return false;
+}
+
+bool Car::set_model(const char * model)
+{
+      if(this-> model!= NULL) {
+		delete[]this->model;
+	}
+	this->model =new char[len_string];
+	memcpy_s(this->model, len_string, model, len_string);
+	this->model[strlen(model)] = 0;
+	return false;
+}
+
+	
+bool Car::set_currency(Money::currency cur)
+{
+	this->cur = cur;
+
+	return false;
+}
+
+bool Car::set_coments(const char * coments)
+{
+	if (this->coments!= NULL)
+    delete[]this->coments;
+
+	this->coments = new char[len_string];
+	memcpy_s(this->coments, len_string, coments, len_string);
+	this->coments[strlen(coments)] = 0;
+
+	
+
+	return false;
+}
+
+bool Car::set_formfaktor(formfaktor form)
+{
+	this->form = form;
+	return false;
+}
+
+
+
+const double Car::get_maxSpeed()
+{
+	return max_speed;
+}
+
+const double Car::get_power()
+{
+	return power;
+}
+
+const char * Car::get_color()
+{
+	return color;
+}
+
+const char * Car::Get_brand()
+{
+	return brand;
+}
+
+const char * Car::Get_model()
+{
+	return model;
+}
+
+const char*  Car::Get_currency()
+{
+	switch (cur) {
+
+	case Money::currency::USD: {
+
+
+		return "USD";
+
+	}
+
+	case Money::currency::UAH: {
+
+
+		return "UAH";
+
+	}
+
+
+
+	case Money::currency::EUR: {
+
+
+		return "EUR";
+	}
+
+	case Money::currency::PLN: {
+
+
+		return "PLN";
+
+	}
+
+	case Money::currency::CAD: {
+
+
+		return "CAD";
+
+	}
+
+	}
+
+	return "none";
+}
+
+
+const char * Car::Get_coments()
+{
+	return coments;
+}
+
+const char * Car::get_formfaktor_like_string()
+{
+	
+	switch(form)
+	{
+
+	case formfaktor::sportcar :
+
+	{
+
+		return "Sportcar";
+
+		}
+
+	case formfaktor::buildingcar:
+
+	{
+		return "Buildingcar";
+	}
+	case formfaktor::truck:
+
+	{
+
+		return "Truck";
+
+	}
+
+	
+
+	case formfaktor::sedan:
+
+	{
+
+		return "Sedan";
+
+	}
+
+	case formfaktor::cabriolet:
+
+	{
+
+		return "Cabriolet";
+
+	}
+	case formfaktor::comby:
+
+	{
+		return "Comby";
+	}
+
+	}
+
+	return "Other";
+
+}
+
+Car::formfaktor Car::get_form()
+{
+   return form;
+}
+
+Money::currency Car::get_currency()
+{
+	return cur;
+}
+
+
+
+void Car::clear()
+{
+	    if (color != NULL) { delete[]color; }
+	    if(brand != NULL) delete[]brand; 
+		if (model != NULL) { delete[]model; }
+		if (coments != NULL) { delete[]coments; }
+	}
+
+
+  int Car::get_id() 
+  {
+	  int temp=0;
+	  int next_id=0;
+	  fstream fil;
+	  fil.open("id_base.txt", ios::in|ios::binary);
+	  assert(fil.is_open() == true);
+	  fil.read((char*)&temp, sizeof(temp));
+	  fil.close();
+
+	  next_id = temp + 1;
+	  fil.open("id_base.txt", ios::out|ios::binary);
+	  
+	  assert(fil.is_open() == true);
+	  fil.write((char*)&next_id, sizeof(next_id));
+	  fil.close();
+
+	  return temp;
+
+    	  
+
+
+  }
+
+  void Car::print()
+  {
+
+	  cout << "ID: " <<ID << endl;
+	  cout << "Brand: " << brand << endl;
+	  cout << "Model: " << model << endl;
+	  cout << "Color: " << color << endl;
+	  cout << "Max speed: " << max_speed << endl;
+	  cout << "Power: " << power << endl;
+	  cout <<"Curenncy: "<<Get_currency()<< endl;
+	  cout << get_formfaktor_like_string();
+	  cout << endl;
+  }
+
+
+Car::~Car()
+{
+	clear();
+}
+
+
+
+void Car::serilization(int a) {
+
+	int pos = a * size_of_object;
+
+
+	fstream file;
+
+	file.open(DATA, ios::in | ios::binary);
+
+	if (!file.is_open()) 
+	{
+		cout << "Error";
+	}
+
+	else{
+
+		file.seekg(pos);
+		file.read((char*)&this->ID, sizeof(this->ID));
+		file.read((char*)this->brand, len_string);
+		file.read((char*)this->model, len_string);
+		file.read((char*)this->color, len_string);
+		file.read((char*)this->coments, len_string);
+		file.read((char*)&this->max_speed, sizeof(this->max_speed));
+		file.read((char*)&this->power, sizeof(this->power));
+		file.read((char*)&this->cur, sizeof(this->cur));
+		file.read((char*)&this->form, sizeof(this->form));
+		file.close();
+	}
+
+}
+
+	void Car::deserilization()
+	{
+		fstream file;
+		file.open(DATA, ios::app | ios::out | ios::binary);
+
+		if (file.is_open() == false) {
+			cout << "ERROR!\n";
+			return;
+		}
+
+		file.write((char*)&this->ID, sizeof(this->ID));
+		file.write((char*)this->brand, len_string);
+		file.write((char*)this->model, len_string);
+		file.write((char*)this->color, len_string);
+		file.write((char*)this->coments, len_string);
+		file.write((char*)&this->max_speed, sizeof(this->max_speed));
+		file.write((char*)&this->power, sizeof(this->power));
+		file.write((char*)&this->cur, sizeof(this->cur));
+		file.write((char*)&this->form, sizeof(this->form));
+		file.close();
+
+
+	}
+
+	//double * Car::_sort(double * aa)
+	//{
+	//	return nullptr;
+	//}
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	void Car::operator=(const Car & car)
+	{
+		ID = car.ID;
+		set_brand(car.brand);
+		set_model(car.model);
+		set_color(car.color);
+		set_maxSpeed(car.max_speed);
+		set_power(car.power);
+		set_currency(car.cur);
+		set_coments(car.coments);
+		set_formfaktor(car.form);
+	}
+
+
+
+
+
+		const char * Car::get_ptr(int value)
+		{
+
+			switch (value) {
+
+			case 1: {
+
+				return Get_brand();
+			}
+			case 2: {
+				return Get_model();
+
+			}
+			case 3: {
+
+				return get_color();
+
+			}
+
+			case 4: {
+
+				return Get_coments();
+
+			}
+
+			case 5: {
+
+				get_maxSpeed();
+
+				break;
+
+			}
+
+
+			}
+
+
+
+
+			return "Eror";
+		}
+
+		void Car::show_cars()
+		{
+
+
+
+
+		}
+
+		bool Car::cmp_power(const Car & o1, const Car & o2)
+		{
+			if (o1.power < o2.power) return true;
+			return false;
+		}
+
+		bool Car::cmp_maxSpeed(const Car & o1, const Car & o2)
+		{
+			if (o1.max_speed < o2.max_speed) return true;
+			return false;
+		}
+
+		bool Car::cmp_brand(const Car & o1, const Car & o2)
+		{
+			if (strcmp(o1.brand, o2.brand)>0) return true;
+			return false;
+		}
+
+		bool Car::cmp_model(const Car & o1, const Car & o2)
+		{
+			if (strcmp(o1.model, o2.model)>0) return true;
+			return false;
+		}
+
+		bool Car::cmp_price(const Car & o1, const Car & o2)
+		{
+			return false;
+		}
+
+		void Car::mySort(Car * arr, size_t size, bool(*func)(const Car &, const Car &))
+		{
+			Car tmp;
+			for (size_t i = 0; i < size - 1; i++) {
+				for (size_t j = i + 1; j < size; j++) {
+					if (func(arr[i], arr[j])) {
+						tmp = arr[i];
+						arr[i] = arr[j];
+						arr[j] = tmp;
+					}
+				}
+			}
+
+		}
+
+		int Car::return_size_of_database()
+		{
+			fstream file(DATA);
+			int size = 0;
+			file.seekg(0, std::ios::end);
+			size = file.tellg();
+			file.close();
+			return size / size_of_object;
+		}
+
+
+
+
+		
+
+
+
+
+	bool operator<(const Car & lhs, const Car & rhs)
+	{
+		return lhs.power < rhs.power;
+	}

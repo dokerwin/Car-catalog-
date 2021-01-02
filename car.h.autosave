@@ -1,0 +1,117 @@
+#ifndef CAR_H
+#define CAR_H
+
+
+#include <QObject>
+
+#include <fstream>
+
+class Car : public QObject
+{
+    Q_OBJECT
+public:
+    explicit Car(QObject *parent = nullptr);
+    
+private:
+    int ID = 0;
+	double max_speed;
+	double power;
+	char* color= NULL;
+	char* brand=NULL;
+	char* model=NULL;
+	char * coments= NULL;
+//	Money::currency cur;
+	const int len_string = 32;
+	static const int size_of_object = 156;// sizeof(Car)-sizeof(len_string)- sizeof(size_of_object);
+
+public:
+	
+	enum formfaktor {
+
+		sportcar, 
+		sedan, 
+		cabriolet,
+		truck,
+		offroad,
+		buildingcar, 
+		comby,
+		other
+	};
+
+private:
+	formfaktor form;
+public:	
+
+	Car(Car & car);
+
+
+	Car(const char* brand = "None",
+		const char* model = "None",
+		const char* color = "None",
+		double max_speed = 0,
+		double power = 0,
+	//	Money mon = Money(0, Money::none),
+		double price = 0, 
+		formfaktor = other, 
+		const char * coments = "None");
+
+
+
+	~Car();
+	
+	bool set_maxSpeed(double speed);
+	bool set_power(double power);
+	bool set_color(const char * color);
+	bool set_brand(const char * brand);
+	bool set_model(const char * model);
+	bool set_currency(Money::currency cur);
+	bool set_coments(const char * coments);
+	bool set_formfaktor(formfaktor form);
+
+
+	
+	const double get_maxSpeed();                                                                                                            
+	const double get_power();
+	const char * get_color();
+	const char* Get_brand();
+	const char* Get_model();
+    const char * Get_currency();
+	const char* Get_coments();
+	const char* get_formfaktor_like_string();
+	formfaktor get_form();
+	Money::currency get_currency();
+
+
+
+	void clear();                                                                                                    
+	int get_id();
+	void print();
+	int gets_id();
+	void serilization(int a);
+	void deserilization();
+
+
+
+	void  operator = (const Car & car);
+	const char* get_ptr(int value);
+	void show_cars();
+	friend bool operator< (const Car &lhs, const Car &rhs);
+	static bool cmp_power(const Car& o1, const Car& o2);
+	static bool cmp_maxSpeed(const Car& o1, const Car& o2);
+	static bool cmp_brand(const Car& o1, const Car& o2);
+	static bool cmp_model (const Car& o1, const Car& o2);
+	static bool cmp_price(const Car& o1, const Car& o2);
+	
+		
+	static void mySort(Car* arr, size_t size, bool(*func)(const Car&, const Car&));
+	static int return_size_of_database();
+
+
+
+
+};
+
+
+static const int size_of_object = 156;
+
+#endif // CAR_H
